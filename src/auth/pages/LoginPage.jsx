@@ -1,4 +1,5 @@
-import { useDispatch } from 'react-redux'
+import { useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 // asignamos un alias para que no haya conflicto con <Link> de @mui/material
 import { Link as RouterLink } from 'react-router-dom'
 import { Google } from '@mui/icons-material'
@@ -8,12 +9,17 @@ import { useForm } from '../../hooks'
 import { checkingAuthentication, startGoogleSignIn } from '../../store/auth/thunks'
 
 export const LoginPage = () => {
+  // aqui accedemos a nuestro store y scamos status
+  const { status } = useSelector(state => state.auth)
+
   const dispatch = useDispatch()
   // usamos nuestro customHook con un estado inicial
   const { email, password, onInputChange } = useForm({
     email: 'carlos@gmail.com',
     password: '123456'
   })
+  // hasta que el status cambie no se volvera a cargar esto -> nos devolvera un true o false
+  const isAuthenticating = useMemo(() => status === 'checking', [status])
   // creamos una funcion para enviar el formulario
   const onSubmit = (event) => {
     event.preventDefault()
@@ -53,12 +59,12 @@ export const LoginPage = () => {
             </Grid>
             <Grid container spacing={2} sx={{ mb: 2, mt: 2 }}>
               <Grid item xs={12} sm={6}>
-                <Button type='submit' variant="contained" fullWidth>
+                <Button disabled={isAuthenticating} type='submit' variant="contained" fullWidth>
                   Login
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Button onClick={onGoogleSignIn} variant="contained" fullWidth>
+                <Button disabled={isAuthenticating} onClick={onGoogleSignIn} variant="contained" fullWidth>
                   <Google />
                   <Typography sx={{ ml: 1 }}>Google</Typography>
                 </Button>
