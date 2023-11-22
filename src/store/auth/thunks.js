@@ -1,4 +1,4 @@
-import { singInWithGoogle } from '../../firebase/providers'
+import { registerUserWithEmailPassword, singInWithGoogle } from '../../firebase/providers'
 import { checkingCredentials, login, logout } from './authSlice'
 
 export const checkingAuthentication = (email, password) => {
@@ -18,5 +18,15 @@ export const startGoogleSignIn = () => {
     if (!result.ok) return dispatch(logout(result.errorMessage))
     // si todo va bien nos logueamos
     dispatch(login(result))
+  }
+}
+// creamos un nuevo thunk que nos servira para registarnos
+export const startCreatingUserWithEmailPassword = ({ email, password, displayName }) => {
+  return async (dispatch) => {
+    // cambiamos nuestro estado a checking
+    dispatch(checkingCredentials())
+    // ejecutamos nuestra funcion para registrarnos a firebase
+    const resp = await registerUserWithEmailPassword({ email, password, displayName })
+    console.log(resp)
   }
 }

@@ -1,5 +1,5 @@
 // añadimos nuestros proveedores de autenticacion
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { FirebaseAuth } from './config'
 // creamos una instancia de nuestro proveedor
 const googleProvider = new GoogleAuthProvider()
@@ -32,3 +32,25 @@ export const singInWithGoogle = async () => {
   }
 }
 // * se exportara al thunk.js
+
+export const registerUserWithEmailPassword = async ({ email, password, displayName }) => {
+  try {
+    // hacemos la coneccion con Firebase
+    const resp = await createUserWithEmailAndPassword(FirebaseAuth, email, password)
+    const { uid, photoURL } = resp.user
+    console.log(resp)
+    return {
+      ok: true,
+      uid,
+      photoURL,
+      email,
+      displayName
+    }
+  } catch (error) {
+    const errorMessage = error.message
+    return {
+      ok: false,
+      errorMessage
+    }
+  }
+}

@@ -4,6 +4,8 @@ import { Button, Grid, Link, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { startCreatingUserWithEmailPassword } from '../../store/auth/thunks'
 // creamos algunos valores iniciales para el formulario
 const formData = {
   email: '',
@@ -17,6 +19,7 @@ const formValidations = {
   displayName: [(value) => value.length >= 1, 'El nombre es obligatorio']
 }
 export const RegisterPage = () => {
+  const dispatch = useDispatch()
   // cremamos un estado que nos ayduara a que nos salgan las advertencias del formulario la primera vez que entramos a RegisterPage
   const [formSubmitted, setFormSubmmited] = useState(false)
   // desestructuramos los valores que requerimos de nuestro customHook - pasamos como segundo argumento nuesto objeto con las validaciones
@@ -25,7 +28,9 @@ export const RegisterPage = () => {
   const onSubmit = (event) => {
     event.preventDefault()
     setFormSubmmited(true)
-    console.log(formState)
+    if (!isFormValid) return
+    // disparamos nuestro thunk con nuestro formState
+    dispatch(startCreatingUserWithEmailPassword(formState))
   }
   return (
     <AuthLayout title='Login'>
