@@ -3,11 +3,12 @@ import { Link as RouterLink } from 'react-router-dom'
 import { Button, Grid, Link, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks'
+import { useState } from 'react'
 // creamos algunos valores iniciales para el formulario
 const formData = {
-  email: 'carlos@gmail.com',
-  password: '123456',
-  displayName: 'Carlos Sánchez'
+  email: '',
+  password: '',
+  displayName: ''
 }
 // creamos un objeto personalizado para nuestras validaciones
 const formValidations = {
@@ -16,17 +17,20 @@ const formValidations = {
   displayName: [(value) => value.length >= 1, 'El nombre es obligatorio']
 }
 export const RegisterPage = () => {
+  // cremamos un estado que nos ayduara a que nos salgan las advertencias del formulario la primera vez que entramos a RegisterPage
+  const [formSubmitted, setFormSubmmited] = useState(false)
   // desestructuramos los valores que requerimos de nuestro customHook - pasamos como segundo argumento nuesto objeto con las validaciones
-  const { email, password, displayName, formState, onInputChange, displayNameValid, emailValid, passwordValid } = useForm(formData, formValidations)
+  const { email, password, displayName, formState, onInputChange, isFormValid, displayNameValid, emailValid, passwordValid } = useForm(formData, formValidations)
   // console.log({ isFormValid, displayNameValid, emailValid, passwordValid })
-  console.log({ displayNameValid })
   const onSubmit = (event) => {
     event.preventDefault()
+    setFormSubmmited(true)
     console.log(formState)
   }
   return (
     <AuthLayout title='Login'>
       <form onSubmit={onSubmit}>
+        <h1>{isFormValid ? 'Form Valid' : 'Form Invalid'}</h1>
           <Grid container>
           <Grid item xs={12} sx={{ mt: 2 }}>
               <TextField
@@ -37,6 +41,8 @@ export const RegisterPage = () => {
                 name='displayName'
                 value={displayName}
                 onChange={onInputChange}
+                error={!!displayNameValid && formSubmitted}
+                helperText={displayNameValid}
               />
             </Grid>
             <Grid item xs={12} sx={{ mt: 2 }}>
@@ -48,6 +54,8 @@ export const RegisterPage = () => {
                 name='email'
                 value={email}
                 onChange={onInputChange}
+                error={!!emailValid && formSubmitted}
+                helperText={emailValid}
               />
             </Grid>
             <Grid item xs={12} sx={{ mt: 2 }}>
@@ -59,6 +67,8 @@ export const RegisterPage = () => {
                 name='password'
                 value={password}
                 onChange={onInputChange}
+                error={!!passwordValid && formSubmitted}
+                helperText={passwordValid}
               />
             </Grid>
             <Grid container spacing={2} sx={{ mb: 2, mt: 2 }}>
