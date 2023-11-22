@@ -9,10 +9,17 @@ const formData = {
   password: '123456',
   displayName: 'Carlos Sánchez'
 }
+// creamos un objeto personalizado para nuestras validaciones
+const formValidations = {
+  email: [(value) => value.includes('@'), 'El correo debe de tener un @'],
+  password: [(value) => value.length >= 6, 'El password debe de tener mas de 6 caracteres'],
+  displayName: [(value) => value.length >= 1, 'El nombre es obligatorio']
+}
 export const RegisterPage = () => {
-  // desestructuramos los valores que requerimos de nuestro customHook
-  const { email, password, displayName, formState, onInputChange } = useForm(formData)
-
+  // desestructuramos los valores que requerimos de nuestro customHook - pasamos como segundo argumento nuesto objeto con las validaciones
+  const { email, password, displayName, formState, onInputChange, displayNameValid, emailValid, passwordValid } = useForm(formData, formValidations)
+  // console.log({ isFormValid, displayNameValid, emailValid, passwordValid })
+  console.log({ displayNameValid })
   const onSubmit = (event) => {
     event.preventDefault()
     console.log(formState)
