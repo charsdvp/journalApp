@@ -1,5 +1,5 @@
 // añadimos nuestros proveedores de autenticacion
-import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth'
 import { FirebaseAuth } from './config'
 // creamos una instancia de nuestro proveedor
 const googleProvider = new GoogleAuthProvider()
@@ -38,7 +38,9 @@ export const registerUserWithEmailPassword = async ({ email, password, displayNa
     // hacemos la coneccion con Firebase
     const resp = await createUserWithEmailAndPassword(FirebaseAuth, email, password)
     const { uid, photoURL } = resp.user
-    console.log(resp)
+    // Aquí sabemos el usuario actual
+    await updateProfile(FirebaseAuth.currentUser, { displayName })
+
     return {
       ok: true,
       uid,

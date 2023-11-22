@@ -26,7 +26,9 @@ export const startCreatingUserWithEmailPassword = ({ email, password, displayNam
     // cambiamos nuestro estado a checking
     dispatch(checkingCredentials())
     // ejecutamos nuestra funcion para registrarnos a firebase
-    const resp = await registerUserWithEmailPassword({ email, password, displayName })
-    console.log(resp)
+    const { ok, uid, photoURL, errorMessage } = await registerUserWithEmailPassword({ email, password, displayName })
+    if (!ok) return dispatch(logout({ errorMessage }))
+    // logueamos el usuario si no hay ningun error
+    dispatch(login({ uid, displayName, email, photoURL }))
   }
 }
