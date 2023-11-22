@@ -1,10 +1,10 @@
 // asignamos unalias para que no haya conflicto con <Link> de @mui/material
 import { Link as RouterLink } from 'react-router-dom'
-import { Button, Grid, Link, TextField, Typography } from '@mui/material'
+import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useMemo, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { startCreatingUserWithEmailPassword } from '../../store/auth/thunks'
 // creamos algunos valores iniciales para el formulario
 const formData = {
@@ -22,6 +22,9 @@ export const RegisterPage = () => {
   const dispatch = useDispatch()
   // cremamos un estado que nos ayduara a que nos salgan las advertencias del formulario la primera vez que entramos a RegisterPage
   const [formSubmitted, setFormSubmmited] = useState(false)
+  // aqui accedemos a nuestro estado de store
+  const { status, errorMessage } = useSelector(state => state.auth)
+  const isCheckingAuthentication = useMemo(() => status === 'checking', [status])
   // desestructuramos los valores que requerimos de nuestro customHook - pasamos como segundo argumento nuesto objeto con las validaciones
   const { email, password, displayName, formState, onInputChange, isFormValid, displayNameValid, emailValid, passwordValid } = useForm(formData, formValidations)
   // console.log({ isFormValid, displayNameValid, emailValid, passwordValid })
@@ -77,8 +80,13 @@ export const RegisterPage = () => {
               />
             </Grid>
             <Grid container spacing={2} sx={{ mb: 2, mt: 2 }}>
+            <Grid item xs={12} sm={6} display={ !!errorMessage ? '' : 'none' }>
+                <Alert severity='error'>{errorMessage}</Alert>
+              </Grid>
               <Grid item xs={12} sm={6}>
-                <Button type='submit' variant="contained" fullWidth>
+                <Button
+                disabled={ isCheckingAuthentication }
+                type='submit' variant="contained" fullWidth>
                   Crear cuenta
                 </Button>
               </Grid>
