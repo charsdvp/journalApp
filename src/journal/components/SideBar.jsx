@@ -1,7 +1,9 @@
 import { TurnedInNot } from '@mui/icons-material'
 import { Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 export const SideBar = ({ drawerWidth = 240 }) => {
+  const { displayName } = useSelector(state => state.auth)
   return (
     <Box component='nav' sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
       <Drawer variant='permanent' // temporary
@@ -9,7 +11,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
         sx={{ display: { xs: 'block' }, '& .MuiDrawe-paper': { boxSizing: 'border-box', width: drawerWidth } }} >
         <Toolbar>
           <Typography variant='h6' noWrap component='div'>
-            Carlos Sánchez
+            {displayName}
           </Typography>
         </Toolbar>
         <Divider />
