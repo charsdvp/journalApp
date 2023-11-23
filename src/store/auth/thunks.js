@@ -1,4 +1,4 @@
-import { registerUserWithEmailPassword, singInWithGoogle } from '../../firebase/providers'
+import { loginWithEmailPassword, registerUserWithEmailPassword, singInWithGoogle } from '../../firebase/providers'
 import { checkingCredentials, login, logout } from './authSlice'
 
 export const checkingAuthentication = (email, password) => {
@@ -20,7 +20,7 @@ export const startGoogleSignIn = () => {
     dispatch(login(result))
   }
 }
-// creamos un nuevo thunk que nos servira para registarnos
+// * creamos un nuevo thunk que nos servira para registarnos
 export const startCreatingUserWithEmailPassword = ({ email, password, displayName }) => {
   return async (dispatch) => {
     // cambiamos nuestro estado a checking
@@ -30,5 +30,19 @@ export const startCreatingUserWithEmailPassword = ({ email, password, displayNam
     if (!ok) return dispatch(logout({ errorMessage }))
     // logueamos el usuario si no hay ningun error
     dispatch(login({ uid, displayName, email, photoURL }))
+  }
+}
+
+// * para loguearnos recibiremos un email y un password
+export const startLoginWithEmailPassword = ({ email, password }) => {
+  return async (dispatch) => {
+    // cambiamos nuestro estado a checking
+    dispatch(checkingCredentials())
+    // aqui ejecutamos nuestro provider con nuestra contraseña y el email
+    const result = await loginWithEmailPassword({ email, password })
+    // si hub algun error se dispara logout
+    if (!result.ok) return dispatch(logout(result))
+    // si no disparamos login con toda nuestra data
+    dispatch(login(result))
   }
 }

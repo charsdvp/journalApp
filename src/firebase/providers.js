@@ -1,5 +1,5 @@
 // añadimos nuestros proveedores de autenticacion
-import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth'
+import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth'
 import { FirebaseAuth } from './config'
 // creamos una instancia de nuestro proveedor
 const googleProvider = new GoogleAuthProvider()
@@ -46,6 +46,27 @@ export const registerUserWithEmailPassword = async ({ email, password, displayNa
       uid,
       photoURL,
       email,
+      displayName
+    }
+  } catch (error) {
+    const errorMessage = error.message
+    return {
+      ok: false,
+      errorMessage
+    }
+  }
+}
+export const loginWithEmailPassword = async ({ email, password }) => {
+  try {
+    // aqui hacemos la conexion a firebase
+    const resp = await signInWithEmailAndPassword(FirebaseAuth, email, password)
+    // de la respuesta solo nos interesa lo siguiente
+    const { uid, photoURL, displayName } = resp.user
+    // retornamos la data
+    return {
+      ok: true,
+      uid,
+      photoURL,
       displayName
     }
   } catch (error) {
