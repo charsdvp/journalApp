@@ -33,7 +33,7 @@ export const journalSlice = createSlice({
     },
     //*  cargar las notas
     setNotes: (state, action) => {
-
+      state.notes = action.payload
     },
     // * cuando estamos guardando una nota
     setSaving: (state) => {
