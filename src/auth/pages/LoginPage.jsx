@@ -8,16 +8,18 @@ import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks'
 import { startGoogleSignIn, startLoginWithEmailPassword } from '../../store/auth/thunks'
 
+const formData = {
+  email: '',
+  password: ''
+}
+
 export const LoginPage = () => {
   // aqui accedemos a nuestro store y scamos status
   const { status, errorMessage } = useSelector(state => state.auth)
 
   const dispatch = useDispatch()
   // usamos nuestro customHook con un estado inicial
-  const { email, password, onInputChange } = useForm({
-    email: '',
-    password: ''
-  })
+  const { email, password, onInputChange } = useForm(formData)
   // hasta que el status cambie no se volvera a cargar esto -> nos devolvera un true o false
   const isAuthenticating = useMemo(() => status === 'checking', [status])
   // creamos una funcion para enviar el formulario

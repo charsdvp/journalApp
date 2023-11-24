@@ -5,6 +5,10 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
   const [formValidation, setFormValidation] = useState({})
 
   useEffect(() => {
+    setFormState(initialForm)
+  }, [initialForm])
+
+  useEffect(() => {
     createValidators()
   }, [formState])
   // aqui analizaremos si cumple con la condicion para que el formulario sea valido
