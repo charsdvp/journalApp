@@ -4,8 +4,8 @@ import { Grid, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui
 import { useMemo } from 'react'
 import { setActiveNote } from '../../store/journal/journalSlice'
 import { useDispatch } from 'react-redux'
-
-export const SideBarItem = ({ title, body, id, date, imageUrls }) => {
+// , imageUrls
+export const SideBarItem = ({ title, body, id, date }) => {
   const dispatch = useDispatch()
   const newTitle = useMemo(() => {
     return title.length > 17
@@ -19,7 +19,7 @@ export const SideBarItem = ({ title, body, id, date, imageUrls }) => {
   }, [body])
 
   const onClickNote = () => {
-    dispatch(setActiveNote({ title, body, id, date, imageUrls }))
+    dispatch(setActiveNote({ title, body, id, date }))
   }
   return (
     <ListItem key={id} disablePadding>
@@ -39,6 +39,6 @@ SideBarItem.propTypes = {
   title: PropTypes.string,
   body: PropTypes.string,
   id: PropTypes.string,
-  date: PropTypes.any,
-  imageUrls: PropTypes.any
+  date: PropTypes.any
+  // imageUrls: PropTypes.any
 }

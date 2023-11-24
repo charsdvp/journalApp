@@ -37,11 +37,20 @@ export const journalSlice = createSlice({
     },
     // * cuando estamos guardando una nota
     setSaving: (state) => {
-
+      state.isSaving = true
+      // TODO: MENSAJE DE ERROR
     },
     // * actualizar nota
-    updateNote: (state) => {
-
+    updateNote: (state, action) => {
+      // actualizamos la referencia local
+      state.isSaving = false
+      state.notes = state.notes.map(note => {
+        if (note.id === action.payload.id) {
+          return action.payload
+        }
+        return note
+      })
+      // TODO: MOSTRAR MENSAJE DE ACTUALIZACION
     },
     // * eliminar nota
     deleteNoteById: (state, action) => {
