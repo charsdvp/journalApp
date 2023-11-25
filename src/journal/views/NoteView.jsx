@@ -5,7 +5,7 @@ import { useForm } from '../../hooks/useForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useMemo, useRef } from 'react'
 import { setActiveNote } from '../../store/journal/journalSlice'
-import { startSaveNote } from '../../store/journal/thunks'
+import { startSaveNote, startUploadingFiles } from '../../store/journal/thunks'
 import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.css'
 
@@ -39,8 +39,8 @@ export const NoteView = () => {
   }
   const onFileInputChange = ({ target }) => {
     if (target.files === 0) return
-    console.log('Subiendo Archivos')
-    // dispatch(startUploadingFIles(target.files))
+    // empezamos el proceso para subir los archivos -> thunks
+    dispatch(startUploadingFiles(target.files))
   }
   return (
     <Grid container direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 1 }} className='animate__animated animate__fadeIn animate__faster'>

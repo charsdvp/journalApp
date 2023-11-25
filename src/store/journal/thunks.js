@@ -1,7 +1,7 @@
 import { collection, doc, setDoc } from 'firebase/firestore/lite'
 import { FirebaseDB } from '../../firebase/config'
 import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote } from './journalSlice'
-import { loadNotes } from '../../helpers'
+import { fileUpload, loadNotes } from '../../helpers'
 
 // inicia el proceso de crear una nueva nota
 export const startNewNote = () => {
@@ -58,5 +58,13 @@ export const startSaveNote = () => {
     await setDoc(docRef, noteToFireStore, { merge: true })
 
     dispatch(updateNote(note))
+  }
+}
+// proceso para subir la imagen a cloudinary
+export const startUploadingFiles = (files = []) => {
+  return async (dispatch) => {
+    dispatch(setSaving())
+    // esperamos la resp de la funcion fileUpload con  nuestro archivos en la posicon 0
+    await fileUpload(files[0])
   }
 }
