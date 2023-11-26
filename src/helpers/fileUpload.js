@@ -15,10 +15,10 @@ export const fileUpload = async (file) => {
       method: 'POST',
       body: formData
     })
-    console.log(resp)
+    // console.log(resp)
     if (!resp.ok) throw new Error('No se pudo subir imagen')
     const cloudResp = await resp.json()
-    console.log(cloudResp)
+    // console.log(cloudResp)
     // retornamos la url que guardaremos en firebase
     return cloudResp.secure_url
   } catch (error) {

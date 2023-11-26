@@ -54,10 +54,15 @@ export const journalSlice = createSlice({
       // actualziamos nuestro mensjae
       state.messageSave = `${action.payload.title}, actualizada correctamente`
     },
+    setPhotosToActiveNote: (state, action) => {
+      state.active.imageUrls = state.active.imageUrls || []
+      state.active.imageUrls = [...state.active.imageUrls, ...action.payload]
+      state.isSaving = false
+    },
     // * eliminar nota
     deleteNoteById: (state, action) => {
 
     }
   }
 })
-export const { addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById, savingNewNote } = journalSlice.actions
+export const { addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById, savingNewNote, setPhotosToActiveNote } = journalSlice.actions

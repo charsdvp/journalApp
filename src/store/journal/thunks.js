@@ -1,6 +1,6 @@
 import { collection, doc, setDoc } from 'firebase/firestore/lite'
 import { FirebaseDB } from '../../firebase/config'
-import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote } from './journalSlice'
+import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote } from './journalSlice'
 import { fileUpload, loadNotes } from '../../helpers'
 
 // inicia el proceso de crear una nueva nota
@@ -65,6 +65,14 @@ export const startUploadingFiles = (files = []) => {
   return async (dispatch) => {
     dispatch(setSaving())
     // esperamos la resp de la funcion fileUpload con  nuestro archivos en la posicon 0
-    await fileUpload(files[0])
+    // await fileUpload(files[0])
+    // para disparar la funcion de forma simultanea
+    const fileUploadPromises = []
+    for (const file of files) {
+      fileUploadPromises.push(fileUpload(file))
+    }
+    const photosUrls = await Promise.all(fileUploadPromises)
+    console.log(photosUrls)
+    dispatch(setPhotosToActiveNote(photosUrls))
   }
 }
