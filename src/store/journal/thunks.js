@@ -1,6 +1,6 @@
-import { collection, doc, setDoc } from 'firebase/firestore/lite'
+import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
 import { FirebaseDB } from '../../firebase/config'
-import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote } from './journalSlice'
+import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote, deleteNoteById } from './journalSlice'
 import { fileUpload, loadNotes } from '../../helpers'
 
 // inicia el proceso de crear una nueva nota
@@ -27,9 +27,6 @@ export const startNewNote = () => {
     // pasamos el payload
     dispatch(addNewEmptyNote(newNote))
     dispatch(setActiveNote(newNote))
-    // dispatch
-    // dispatch(newNote)
-    // dispatch(activarNote)
   }
 }
 // proceso para cargar la nota
@@ -72,7 +69,20 @@ export const startUploadingFiles = (files = []) => {
       fileUploadPromises.push(fileUpload(file))
     }
     const photosUrls = await Promise.all(fileUploadPromises)
-    console.log(photosUrls)
+    // console.log(photosUrls)
     dispatch(setPhotosToActiveNote(photosUrls))
+  }
+}
+
+export const startDeletingNote = () => {
+  return async (dispatch, getState) => {
+    const { uid } = getState().auth
+    const { active: note } = getState().journal
+    // creamos la referencia a firebase
+    const docRef = doc(FirebaseDB, `/${uid}/journal/notes/${note.id}`)
+    // borramos
+    await deleteDoc(docRef)
+    // disparamos nuestra accion
+    dispatch(deleteNoteById(note.id))
   }
 }
