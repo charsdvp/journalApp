@@ -14,7 +14,7 @@ export const startNewNote = () => {
     const newNote = {
       title: '',
       body: '',
-      imageUrls: [],
+      imageUrls: null || [],
       date: new Date().getTime()
     }
     // creamos la referencia al documento de firebase
